@@ -1,136 +1,114 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FAST</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test de vitesse</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
 </head>
 <body class="locked">
-  <div id="app" class="app">
-    <header class="top-bar">
-      <div class="lang">
-        <button class="lang-btn" id="langBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
-          <span id="langLabel">Français (France)</span>
-          <svg class="chevron" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0h10L5 6z"/></svg>
-        </button>
-        <div class="lang-menu" id="langMenu" role="listbox">
-          <button type="button" role="option" data-lang="Français (France)" aria-current="true">Français (France)</button>
-          <button type="button" role="option" data-lang="English">English</button>
-          <button type="button" role="option" data-lang="Español">Español</button>
-          <button type="button" role="option" data-lang="Deutsch">Deutsch</button>
-        </div>
+
+  <!-- ======= Blurred intro prompt ======= -->
+  <div id="promptOverlay">
+    <div id="promptBox">
+      <div id="promptTitle">made by taha 7way simo</div>
+      <p id="promptText">kteb speed li bghiti</p>
+      <div class="promptRow">
+        <input type="number" id="speedInput" placeholder="0" min="0.1" max="99999" step="0.1">
+        <select id="unitSelect">
+          <option value="Kbps">Kbps</option>
+          <option value="Mbps" selected>Mbps</option>
+          <option value="Gbps">Gbps</option>
+        </select>
+        <button id="promptBtn">GO</button>
       </div>
-      <a class="privacy" href="#confidentialite">Confidentialité</a>
+      <div id="promptHint">bdel l'unit&eacute; men Kbps / Mbps / Gbps</div>
+    </div>
+  </div>
+
+  <!-- ======= Page ======= -->
+  <div id="page">
+
+    <header class="topbar">
+      <nav class="topnav">
+        <span class="navItem">Fran&ccedil;ais (France)
+          <svg class="caret" viewBox="0 0 12 8" width="10" height="7"><path d="M1 1.5 L6 6.5 L11 1.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <a class="navItem" href="#">Confidentialit&eacute;</a>
+      </nav>
     </header>
 
-    <main>
-      <div class="logo" aria-label="FAST">
-        <svg class="logo-mark" viewBox="0 0 200 152" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <clipPath id="rightHalf">
-              <rect x="100" y="0" width="110" height="160"/>
-            </clipPath>
-          </defs>
-          <path fill="#e31c23" d="M22 140c1-48 40-86 78-86 38 0 77 38 78 86h-23c-1-35-32-63-55-63s-54 28-55 63H22z"/>
-          <g clip-path="url(#rightHalf)" fill="#e31c23">
-            <path d="M48 140c0-35 27-62 52-62s52 27 52 62h-18c0-25-18-44-34-44s-34 19-34 44H48z"/>
-            <path d="M70 140c0-22 15-38 30-38s30 16 30 38h-16c0-13-8-22-14-22s-14 9-14 22H70z"/>
-          </g>
-          <path fill="#111" d="M97 141 L111 136 L109 18 Z"/>
-          <circle cx="100" cy="138" r="9.5" fill="#111"/>
-        </svg>
-        <span class="logo-word">FAST</span>
+    <main class="main">
+
+      <!-- Logo: drop your own image file next to index.html as logo.png -->
+      <div class="brand">
+        <img id="logoImg" class="logoImg" src="logo.png" alt=""
+             onerror="this.classList.add('missing');this.removeAttribute('src');">
       </div>
 
-      <p class="speed-label" id="speedLabel">Votre vitesse de connexion est de</p>
+      <h1 id="statusText">Votre vitesse de connexion est de</h1>
 
-      <div class="speed-row">
-        <div class="speed-value" id="speedValue">0</div>
-        <div class="speed-side">
-          <div class="speed-unit" id="speedUnit">Mbps</div>
-          <button class="refresh is-hidden" id="refreshBtn" type="button" title="Relancer le test" aria-label="Relancer le test">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="none" stroke="currentColor" stroke-width="2.35" stroke-linecap="round" d="M19.4 12a7.4 7.4 0 1 1-2.1-5.2"/>
-              <path fill="currentColor" d="M17.2 3.2l.3 5.3-5.1-1.4z"/>
+      <!-- Speed readout -->
+      <div class="readout">
+        <div id="speedValue" class="testing">0</div>
+        <div class="readoutSide">
+          <div id="speedUnit" class="testing">Mbps</div>
+          <button id="refreshBtn" type="button" aria-label="Refaire le test">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 11a8 8 0 1 0-1.6 5.4"/>
+              <polyline points="20 4 20 11 13 11"/>
             </svg>
           </button>
         </div>
       </div>
 
-      <button class="more-btn is-hidden" id="moreBtn" type="button" aria-expanded="false">Voir plus d'infos</button>
+      <!-- More info -->
+      <button id="moreBtn" type="button">Voir plus d'infos</button>
 
-      <section class="more-panel" id="morePanel" aria-hidden="true">
-        <div>
-          <span class="metric-label">Téléchargement</span>
-          <span class="metric-value" id="downloadVal">—</span><span class="metric-unit" id="downloadUnit"></span>
+      <div id="moreInfo">
+        <div class="infoGrid">
+          <div class="infoItem">
+            <div class="infoLabel">T&Eacute;L&Eacute;CHARGEMENT</div>
+            <div class="infoValue"><span id="downVal">0</span><span class="infoUnit down-unit">Mbps</span></div>
+          </div>
+          <div class="infoItem">
+            <div class="infoLabel">ENVOI</div>
+            <div class="infoValue"><span id="upVal">0</span><span class="infoUnit up-unit">Mbps</span></div>
+          </div>
+          <div class="infoItem">
+            <div class="infoLabel">LATENCE NON CHARG&Eacute;E</div>
+            <div class="infoValue"><span id="pingVal">0</span><span class="infoUnit">ms</span></div>
+          </div>
+          <div class="infoItem">
+            <div class="infoLabel">LATENCE CHARG&Eacute;E</div>
+            <div class="infoValue"><span id="loadedPingVal">0</span><span class="infoUnit">ms</span></div>
+          </div>
         </div>
-        <div>
-          <span class="metric-label">Envoi</span>
-          <span class="metric-value" id="uploadVal">—</span><span class="metric-unit" id="uploadUnit"></span>
-        </div>
-        <div>
-          <span class="metric-label">Latence non chargée</span>
-          <span class="metric-value" id="unloadedPingVal">—</span><span class="metric-unit">ms</span>
-        </div>
-        <div>
-          <span class="metric-label">Latence chargée</span>
-          <span class="metric-value" id="loadedPingVal">—</span><span class="metric-unit">ms</span>
-        </div>
-      </section>
+      </div>
 
-      <nav class="social" aria-label="Liens">
-        <a class="icon help" href="#aide" aria-label="Aide">?</a>
-        <a class="icon" href="https://www.facebook.com/netflix" aria-label="Facebook">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v7h3v-7h3l1-3h-4V9c0-.6.4-1 1-1z"/></svg>
+      <!-- Social row -->
+      <div class="socialRow">
+        <a class="socialIcon" href="#" aria-label="Aide"><span class="qmark">?</span></a>
+        <a class="socialIcon" href="#" aria-label="Partager">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="#fff"><path d="M13.5 21v-8h2.7l.4-3.2h-3.1V7.7c0-.9.26-1.55 1.57-1.55H16.7V3.3A21 21 0 0 0 14.27 3.2c-2.4 0-4.05 1.47-4.05 4.17v2.43H7.5V13h2.72v8z"/></svg>
         </a>
-        <a class="icon" href="https://twitter.com/netflix" aria-label="Twitter">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 5.9c-.8.3-1.6.6-2.4.7a4.1 4.1 0 0 0 1.8-2.3 8.2 8.2 0 0 1-2.6 1 4.1 4.1 0 0 0-7 3.8A11.7 11.7 0 0 1 3.1 4.8a4.1 4.1 0 0 0 1.3 5.5 4 4 0 0 1-1.9-.5v.1a4.1 4.1 0 0 0 3.3 4 4.1 4.1 0 0 1-1.8.1 4.1 4.1 0 0 0 3.9 2.9A8.3 8.3 0 0 1 2 18.4a11.7 11.7 0 0 0 6.3 1.9c7.6 0 11.7-6.3 11.7-11.7v-.5A8.3 8.3 0 0 0 22 5.9z"/></svg>
+        <a class="socialIcon" href="#" aria-label="Partager">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="#fff"><path d="M22 5.9a8 8 0 0 1-2.3.64 4 4 0 0 0 1.76-2.22 8 8 0 0 1-2.54.97 4 4 0 0 0-6.82 3.65A11.35 11.35 0 0 1 3.86 4.7a4 4 0 0 0 1.24 5.34 4 4 0 0 1-1.81-.5v.05a4 4 0 0 0 3.2 3.92 4 4 0 0 1-1.8.07 4 4 0 0 0 3.73 2.78A8 8 0 0 1 2.9 18.1a11.3 11.3 0 0 0 6.12 1.8c7.35 0 11.37-6.09 11.37-11.37l-.01-.52A8.1 8.1 0 0 0 22 5.9z"/></svg>
         </a>
-      </nav>
+      </div>
+
     </main>
 
-    <p class="demo-badge">DÉMO / SIMULATION — pas une mesure réelle</p>
-
-    <footer>
-      <span class="powered">POWERED BY</span>
-      <span class="netflix" aria-label="Netflix">NETFLIX</span>
+    <footer class="footer">
+      <div class="poweredBy">
+        <span class="pbText">POWERED BY</span>
+        <span class="pbBrand" id="pbBrand">TAHA &amp; SIMO</span>
+      </div>
     </footer>
+
   </div>
 
-  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal">
-      <h1 class="modal-title" id="modalTitle">made by taha 7way simo</h1>
-      <p class="modal-copy">Entrez n’importe quelle vitesse positive, puis lancez la simulation.</p>
-      <form id="speedForm" class="modal-form" autocomplete="off" novalidate>
-        <div class="field">
-          <label for="desiredSpeed">Vitesse</label>
-          <input
-            type="number"
-            id="desiredSpeed"
-            name="speed"
-            inputmode="decimal"
-            min="0"
-            step="any"
-            placeholder="Ex. 250"
-            required
-          >
-        </div>
-        <div class="field">
-          <label for="unitSelect">Unité</label>
-          <select id="unitSelect" name="unit">
-            <option value="Kbps">Kbps</option>
-            <option value="Mbps" selected>Mbps</option>
-            <option value="Gbps">Gbps</option>
-          </select>
-        </div>
-        <button type="submit" class="start-btn">Start</button>
-      </form>
-      <p class="form-error" id="formError" hidden>Entrez une vitesse strictement positive.</p>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
